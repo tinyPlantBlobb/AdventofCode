@@ -42,66 +42,38 @@ def setkind(hand):
         handtype = highcard 
     return (hand[0], handtype, hand[2])
 
-def sorthand(x,y):
-    x = x[0]
-    y = y[0]
-    if x == y:
-        return 0
-    elif x.isdigit() and y.isdigit():
-        return int(x) - int(y)
+def lookup(s):
+    if s.isdigit():
+        return int(s)
     else: 
-        for n in range(len(x)):
-            if x[n]== "A":
-                if y[n] == "A":
-                    pass
-                else:
-                    return 1
-            elif x[n]=="K":
-                if y[n] == "A":
-                    return -1
-                elif y[n] == "K":
-                    pass
-                else: 
-                    return 1                    
-            elif x[n]== "Q":
-                if y[n] == "A":
-                    return -1
-                elif y[n] == "K":
-                    return -1
-                elif y[n] == "Q":
-                    pass 
-                elif y[n] == "J":
-                    return -1
-                elif y[n] == "T":
-                    return 1
-                else: 
-                    return 1
-            elif x[n]== "J":
-                if y[n]== "J":
-                    pass
-                return -1
-            elif x[n]== "T":
-                if y[n] == "A":
-                    return -1
-                elif y[n] == "K":
-                    return -1
-                elif y[n] == "Q":
-                    return -1 
-                elif y[n] == "J":
-                    return -1
-                elif y[n] == "T":
-                    pass
-                else: 
-                    return 1
-            else: 
-                if x[n].isdigit() and not y[n].isdigit():
-                    return -1
-                elif not x[n].isdigit() and y[n].isdigit():
-                    return 1
-                elif(int(x[n]) != int(y[n])):
-                    return int(x[n]) - int(y[n])
-                else: 
-                    pass
+        if s == 'A':
+            return 14
+        elif s == 'K':
+            return 13
+        elif s == 'Q':
+            return 12
+        elif s == 'J':
+            return 1
+        elif s == 'T':
+            return 10
+
+def sorthand(t1,t2):
+    x = t1[0]
+    y = t2[0]
+    for n in range(len(x)):
+        if x[n].isdigit() and y[n].isdigit():
+            if x[n] == y[n]:
+                pass
+            return int(x[n]) - int(y[n])
+        else:
+            a = lookup(x[n])
+            b = lookup(y[n])
+            if (a == b):
+                pass
+            else:
+                return a - b
+        
+            
             
     return 0
 
