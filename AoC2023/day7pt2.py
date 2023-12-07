@@ -15,11 +15,18 @@ def parseHand(cards):
         amount = l.get(c, 0) +1
         l.update({c: amount})
         card = c
-    result = sorted(list(l.items()),key=lambda x: x[1], reverse=True)
     j = l.get("J",0)
+    l.update({"J":0})
+    result = sorted(list(l.items()),key=lambda x: x[1], reverse=True)
+    
     if j == 5:
+        l.update({"J":5})
+        result = list(l.items())
         return result
-    j = result[0][1]+j
+    elif j >=result[0][1] and result[0][0] == "J":
+        j =  result[1][1] + j
+    else: 
+        j = result[0][1]+j
     result[0] = (result[0][0],j)
     return result
 
@@ -63,18 +70,16 @@ def sorthand(t1,t2):
     for n in range(len(x)):
         if x[n].isdigit() and y[n].isdigit():
             if x[n] == y[n]:
-                pass
-            return int(x[n]) - int(y[n])
+                continue
+            else:
+                return int(x[n]) - int(y[n])
         else:
             a = lookup(x[n])
             b = lookup(y[n])
             if (a == b):
-                pass
+                continue
             else:
-                return a - b
-        
-            
-            
+                return a - b       
     return 0
 
 inp = AoCparse.getinput(7)
@@ -86,7 +91,6 @@ for i in inp:
     wager = i.split(" ")[1]
     handwager.append((hands, "", (int(wager))))
 
-print(handwager)
 processedpt2 = []
 for i in handwager:
     processedpt2.append(setkind(i))
@@ -97,6 +101,6 @@ r = 1
 result = 0
 for b in processedpt2:
     result += b[2]*r
-    print(f"{r}, {b}, {b[2]*r}, {result}")
     r += 1
 print(result)
+print("the result should be 250757288")
