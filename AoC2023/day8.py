@@ -1,8 +1,9 @@
 import AoCparse
 import re
 from itertools import groupby
+import math
 def pt1(input):
-    currentnode = "AAA"
+    currentnode = "NBA"
     treedict = {}
     counter = 0
 
@@ -16,7 +17,7 @@ def pt1(input):
         b = touple[1].split(")")[0]
         treedict.update({s[0].strip(): (a,b)})
         
-    while currentnode != "ZZZ":
+    while not re.match("..Z", currentnode):
         for i in instructions:
             t = treedict.get(currentnode)
             counter += 1
@@ -25,7 +26,21 @@ def pt1(input):
             else:
                 currentnode = t[1]
                 
-    print(counter)
+    print(f"pt1: {counter}")
+    
+def pt2helper(instructions, treedict, start):
+    currentnode = start
+    counter = 0
+        
+    while not re.match("..Z", currentnode):
+        for i in instructions:
+            t = treedict.get(currentnode)
+            counter += 1
+            if i == "L":
+                currentnode = t[0]
+            else:
+                currentnode = t[1]
+    return counter
     
     
 def pt2(inp):
@@ -38,38 +53,19 @@ def pt2(inp):
         a = touple[0].split("(")[1]
         b = touple[1].split(")")[0]
         treedict.update({s[0].strip(): (a,b)})
+        
     starts = treedict.keys()
-    
     currentnode = [re.findall("..A *", start) for start in starts]
     currentnodes = list(filter(None, currentnode))
-    print(currentnodes)
-    counter = 0
-    done = False
+    doneparts = []
+    result = 1
+    for i in currentnodes:
+        res = pt2helper(instructions, treedict, i[0])
+        doneparts.append(res)
+    result = math.lcm(*doneparts)
+    print(f"pt2: {result}")
+
     
-    # print(input)
-    # print(instructions)
-    # print(tree)
-    
-    # print(treedict)
-        
-    while not done:
-        for i in instructions:
-            counter += 1
-            for j in currentnodes:
-                n = j[0]
-                t = treedict.get(n)
-                if i == "L":
-                    n = t[0]
-                    j = list(n)
-                else:
-                    n = t[1]
-                    j = list(n)
-        for i in currentnode:
-            if not re.match("..Z", i):
-                continue
-            else:
-                done = True
-    print(counter)
     
 input = AoCparse.getinput(8)
 pt1(input)
