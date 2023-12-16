@@ -12,6 +12,8 @@ for line in lines:
     temp = 0
     for c in line:
         temp = hashchchar(temp, c)
-    result += temp
-    
-print(result)
+    result += temp    
+
+
+
+print(f"pt1 {result}")
