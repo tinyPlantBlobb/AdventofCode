@@ -62,7 +62,7 @@ def pt1(input):
 
         newpoint = isconnectedto(input, *e)
         if newpoint:
-            print(newpoint)
+            #print(newpoint)
             for point in newpoint:
                 if point not in pipe.keys():
                     q.put(point)
@@ -117,6 +117,68 @@ def pt2(input):
             return []
         else:
             return "error"
+    
+    def floodfill(board,pipe):
+        q = queue.SimpleQueue()
+        for i in range(len(board[0])):
+            q.put((i,0))
+            q.put((i,len(board)-1))
+        for i in range(len(board)):
+            q.put((0,i))
+            q.put((len(board[0])-1,i))
+        while not q.empty():
+            curr = q.get()
+            if board[curr[1]][curr[0]] == ".":
+                board[curr[1]][curr[0]] = "#"
+                for i in [(0,1),(1,0),(-1,0),(0,-1),(0,-1),(1,1),(-1,1),(1,-1),(-1,-1)]: 
+                    xn = curr[0]+i[0]
+                    yn = curr[1]+i[1]
+                    
+                    if xn >= 0 and yn >= 0 and yn < len(board) and xn < len(board[0]):
+                        if board[yn][xn] == ".":
+                            q.put((xn,yn))
+                        if board[yn][xn] in "FL|S" and board[yn][xn-1] == "J7|":
+                            q.put((xn,yn+1))
+                            q.put((xn+1,yn+1))
+                        if board[yn][xn] in "J7|" and board[yn][xn+1] == "FL|":
+                            q.put((xn,yn+1))
+                            q.put((xn+1,yn+1))
+                        if board[yn][xn] in "SJL-" and board[yn+1][xn] == "F7-":
+                            q.put((xn+1,yn))
+                            q.put((xn+1,yn+1))
+            else:
+                if board[yn][xn] in "FL|S" and board[yn][xn-1] == "J7|S":
+                    xn = curr[0]
+                    yn = curr[1] + 1
+                if board[yn-1][xn] in "SJL-" and board[yn][xn] == "SF7-":
+                    xn = curr[0] + 1
+                    yn = curr[1]
+                
+                if xn >= 0 and yn >= 0 and yn < len(board)-1 and xn < len(board[0])-1:
+                    if board[yn][xn] == ".":
+                        q.put((xn,yn))
+                    if board[yn][xn] in "FL|S" and board[yn][xn-1] == "J7|":
+                        q.put((xn,yn+1))
+                        q.put((xn+1,yn+1))
+                    if board[yn][xn] in "J7|" and board[yn][xn+1] == "FL|":
+                        q.put((xn,yn+1))
+                        q.put((xn+1,yn+1))
+                    if board[yn][xn] in "SJL-" and board[yn+1][xn] == "F7-":
+                        q.put((xn+1,yn))
+                        q.put((xn+1,yn+1))
+                        # if board[yn][xn] =="F" and board[yn][xn-1] == "7":
+                        #     #get next possible filled horizontal
+                        # elif board[yn][xn] =="L" and board[yn][xn-1] == "J":
+                        #     #get next possible filled horizontal
+                        # elif board[yn][xn] =="|" and board[yn][xn+1] == "|":
+                            
+                        # elif board[yn][xn] =="-" and board[yn-1][xn] == "-":
+                        # #     q.put((xn,yn))
+                        # elif board[yn][xn] == "L" and board[yn-1][xn]== "F":
+                        # #     q.put((xn,yn))
+                        # elif board[yn][xn] == "J" and board[yn][xn+1]== "F":
+                            
+        
     pipe = []
     startingpoint = getstartingpoint(input)
     q = queue.SimpleQueue()
@@ -133,7 +195,29 @@ def pt2(input):
                     q.put(point)
                     pipe.append(e)
             index +=1
-    print(index)
+    #print(index)
+    board = [["." for x in range(len(y))] for y in input]
+    
+    for y in range(len(input)):
+        for x in range(len(input[y])):
+            if (x,y) in pipe:
+                board[y][x] = input[y][x]
+            else:
+                board[y][x] = "."
+    floodfill(board, pipe)
+    AoCparse.tofile(board)
+    counter = 0
+    for y in range(len(board)):
+        for x in range(len(board[y])):
+            if board[y][x] == ".":
+                counter +=1
+                
+    print(counter)
+        
 input = AoCparse.getinput(10)
 pt1(input)
 pt2(input)
+
+
+
+
