@@ -9,3 +9,4 @@ def getnextblock(board, x, y, straight):
         print(x)
     
     return (x, y, straight, heat)
+
