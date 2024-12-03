@@ -1,5 +1,4 @@
 def run(input):
-    print("Day 1 of Advent of Code!")
     lists = [i.split("   ") for i in input]
     list1 = sorted([int(i[0]) for i in lists])
     list2 = sorted([int(i[1]) for i in lists])
