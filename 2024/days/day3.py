@@ -9,7 +9,8 @@ def run(input):
     multiplications = list(
         map(lambda x: re.findall(r"mul\(\d{1,3},\d{1,3}\)", x.strip()), input)
     )
-    print(multiplications)
+    # print(list(map(lambda x: re.findall(r"\d{3,}", x), input)))
+    # print(multiplications)
     result = sum(
         list(
             map(
@@ -46,7 +47,7 @@ def run(input):
 
     def enable(element):
         global enabled
-        print(element, enabled)
+        # print(element, enabled)
         if element == "do()":
             enabled = True
             return False
