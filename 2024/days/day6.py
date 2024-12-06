@@ -11,7 +11,7 @@ def run(input):
     guards = (guardpos, translate_direction(input[guardpos[1]][guardpos[0]]))
     obstacles = get_obstacles(input)
     print(guards)
-    for i in range(1, 200000):
+    for i in range(1, 10000):
         obstacle = get_next_obstacle_in_direction(
             obstacles, guards[0][0], guards[0][1], guards[1]
         )
@@ -50,7 +50,7 @@ def run(input):
             obstacle[1] - guards[1][1],
         )
         guards = moveguard(guards, obstacle)
-        # printfield(field)
+        print(guards)  # printfield(field)
 
     printfield(field)
     # print(guards, obstacles)
@@ -72,32 +72,48 @@ def get_obstacles(input):
 
 def get_next_obstacle_in_direction(obstacles, x, y, direction):
     if direction[0] == (0, 1):
-        obstacles = sorted(obstacles, key=lambda x: x[0], reverse=False)
+        obstacles = sorted(obstacles, key=lambda x: x[0], reverse=True)
     elif direction[0] == (0, -1):
         obstacles = sorted(obstacles, key=lambda x: x[0], reverse=True)
     elif direction[0] == (1, 0):
-        obstacles = sorted(obstacles, key=lambda x: x[1], reverse=False)
+        obstacles = sorted(obstacles, key=lambda x: x[1], reverse=True)
     elif direction[0] == (-1, 0):
         obstacles = sorted(obstacles, key=lambda x: x[1], reverse=True)
     # print(obstacles)
+    possibles = []
     for i in obstacles:
         if direction[0] == 0 and x == i[0]:
             if direction[1] > 0 and y < i[1]:
                 # print("taken", i)
-                return i
+                possibles.append(i)
 
             elif direction[1] < 0 and y > i[1]:
                 # print("taken", i)
-                return i
+                possibles.append(i)
         if direction[1] == 0 and y == i[1]:
             if direction[0] > 0 and x < i[0]:
                 # print("taken", i)
-                return i
+                possibles.append(i)
 
             elif direction[0] < 0 and x > i[0]:
                 # print("taken", i)
-                return i
-
+                possibles.append(i)
+    print(possibles)
+    if len(possibles) > 0:
+        mindiff = 100000000
+        minindex = 0
+        for i in enumerate(possibles):
+            if direction[0] == 0:
+                diff = abs(y - i[1][1])
+                if diff < mindiff:
+                    mindiff = diff
+                    minindex = i[0]
+            elif direction[1] == 0:
+                diff = abs(x - i[1][0])
+                if diff < mindiff:
+                    mindiff = diff
+                    minindex = i[0]
+        return possibles[minindex]
     if direction == (0, 1):
         return (x, 1000000000)
     elif direction == (0, -1):
@@ -111,7 +127,7 @@ def get_next_obstacle_in_direction(obstacles, x, y, direction):
 
 
 def printfield(field):
-    print("\n".join(map(lambda x: "".join(x), field)))
+    print("\n".join(map(lambda x: "".join(x), field)), file=open("out.txt", "w"))
     stringified = "".join(map(lambda x: "".join(x), field))
     print(stringified.count("x") + 1)
 
