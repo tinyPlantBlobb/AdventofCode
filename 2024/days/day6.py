@@ -53,6 +53,15 @@ def run(input):
         print(guards)  # printfield(field)
 
     printfield(field)
+    newpossibleobstacles = [
+        (x, y)
+        for y in range(len(field))
+        for x in range(len(field[y]))
+        if field[y][x] == "x"
+    ]
+    newpossibleobstacles.remove((90, 66))
+    print(newpossibleobstacles[0])
+    # TODO: runn with all permustions of new obstacles and add loop detection
     # print(guards, obstacles)
 
 
@@ -62,7 +71,7 @@ def get_obstacles(input):
     # obsacles += [(x, -1) for x in range(len(input[0]))]
     # obsacles += [(x, len(input)) for x in range(len(input[0]))]
     res = [
-        (int(x), int(y))
+        [int(x), int(y), 0]
         for y in range(len(input))
         for x in range(len(input[y]))
         if input[y][x] == "#"
@@ -129,7 +138,7 @@ def get_next_obstacle_in_direction(obstacles, x, y, direction):
 def printfield(field):
     print("\n".join(map(lambda x: "".join(x), field)), file=open("out.txt", "w"))
     stringified = "".join(map(lambda x: "".join(x), field))
-    print(stringified.count("x") + 1)
+    print(stringified.count("x"))
 
 
 def translate_direction(char):
