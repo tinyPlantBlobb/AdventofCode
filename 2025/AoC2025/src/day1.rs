@@ -14,7 +14,7 @@ pub fn run(input:String){
             }.expect("no direction given");
             let turn = i64::from_str_radix(clicks, 10).expect("not an int");
             let prev_position = position;
-            let mut position_between : i64= (position + direction * turn);
+            let mut position_between : i64= position + direction * turn;
             let overflow_turns = i64::abs(turn.div_euclid(100));
             position = position_between.rem_euclid(100); 
             if position == 0 {
@@ -27,7 +27,7 @@ pub fn run(input:String){
             if overflow_turns >0 {
                 result2+=i64::abs(overflow_turns);
                 position_between -= direction *overflow_turns * 100;}
-                if  ((position_between > 100 )|| (position_between < 0 && prev_position != 0)){
+                if  (position_between > 100 )|| (position_between < 0 && prev_position != 0) {
                     result2 += 1; 
                 }
 
